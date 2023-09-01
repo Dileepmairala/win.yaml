@@ -1,28 +1,33 @@
----
-- name: Install Windows Exporter
-  hosts: 10.10.5.181
+--
+- name: Install and Configure Windows Exporter
+  hosts: 10.10.5.182
+  gather_facts: false
+
   tasks:
-    - name: Download Windows Exporter
+    - name: Download Windows Exporter ZIP
       win_get_url:
-        url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-386.exe
-        dest: C:\Prometheus\windows_exporter.exe
-      register: download_result
+        url: "https://github.com/prometheus-community/windows_exporter/releases/download/v1.2.0/windows_exporter-1.2.0-amd64.zip"
+        dest: "C:\Users\test"
 
-    - name: Configure Windows Exporter
+    - name: Extract Windows Exporter ZIP
+      win_unzip:
+        src: "C:\\Temp\\windows_exporter.zip"
+        dest: "C:\\Program Files\\Windows Exporter"
+        creates: "C:\\Program Files\\Windows Exporter\\windows_exporter.exe"
+
+    - name: Create Windows Exporter Service
       win_shell: |
-        New-Item -Path "C:\Prometheus" -ItemType Directory -Force
-        $env:PATH += ";C:\Prometheus"
-        Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "TcpTimedWaitDelay" -Value 30 -Type DWord
-        Start-Process -FilePath "C:\Prometheus\windows_exporter.exe" -ArgumentList '--collectors.enabled="cpu,disk,logon,net,os,service,system,textfile"' -NoNewWindow -Wait
-      when: download_result is succeeded
+        $serviceName = "windows_exporter"
+        $executablePath = "C:\\Program Files\\Windows Exporter\\windows_exporter.exe"
+        $arguments = "--collector.textfile.directory=C:\\Prometheus\\exporter_textfiles"
 
-    - name: Open Windows Exporter Port in Firewall
-      win_firewall_rule:
-        name: Prometheus-Windows-Exporter
-        enabled: yes
-        direction: in
-        action: allow
-        protocol: tcp
-        remote_ip: any
-        local_port: 9182
-      when: download_result is succeeded
+        New-Service -Name $serviceName -BinaryPathName "$executablePath $arguments" -DisplayName "Windows Exporter"
+        Start-Service -Name $serviceName
+      args:
+        executable: powershell.exe
+
+    - name: Add Firewall Rule for Windows Exporter
+      win_shell: |
+        New-NetFirewallRule -DisplayName "Windows Exporter" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 9182
+      args:
+        executable: powershell.exe
