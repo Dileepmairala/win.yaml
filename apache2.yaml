@@ -1,28 +1,13 @@
 ---
 - name: Install Apache2
-  hosts: 10.10.5.181  # Replace with the name of your target host or group
-  become: no # This allows the playbook to run with sudo privileges
-
+  hosts: 10.10.5.181
+  become: yes  # This enables privilege escalation using sudo
   tasks:
     - name: Update APT package cache
       apt:
         update_cache: yes
-      when: ansible_os_family == "Debian"  # Only run on Debian/Ubuntu systems
 
     - name: Install Apache2
       apt:
         name: apache2
         state: present
-      when: ansible_os_family == "Debian"  # Only run on Debian/Ubuntu systems
-
-    - name: Start Apache2 service
-      service:
-        name: apache2
-        state: started
-      when: ansible_os_family == "Debian"  # Only run on Debian/Ubuntu systems
-
-    - name: Enable Apache2 service at boot
-      service:
-        name: apache2
-        enabled: yes
-      when: ansible_os_family == "Debian"  # Only run on Debian/Ubuntu systems
