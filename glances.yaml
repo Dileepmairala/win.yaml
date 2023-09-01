@@ -1,0 +1,17 @@
+---
+- name: Install Glances
+  hosts: 10.10.5.181  # Replace with the name of your target host or group
+  become: yes  # This allows the playbook to run with sudo privileges
+
+  tasks:
+    - name: Install Glances (Debian/Ubuntu)
+      apt:
+        name: glances
+        state: present
+      when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+    - name: Install Glances (CentOS/RedHat)
+      yum:
+        name: glances
+        state: present
+      when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
