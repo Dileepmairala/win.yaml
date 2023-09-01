@@ -1,0 +1,28 @@
+---
+- name: Install Windows Exporter
+  hosts: 10.10.5.181
+  tasks:
+    - name: Download Windows Exporter
+      win_get_url:
+        url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-386.exe
+        dest: C:\Prometheus\windows_exporter.exe
+      register: download_result
+
+    - name: Configure Windows Exporter
+      win_shell: |
+        New-Item -Path "C:\Prometheus" -ItemType Directory -Force
+        $env:PATH += ";C:\Prometheus"
+        Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "TcpTimedWaitDelay" -Value 30 -Type DWord
+        Start-Process -FilePath "C:\Prometheus\windows_exporter.exe" -ArgumentList '--collectors.enabled="cpu,disk,logon,net,os,service,system,textfile"' -NoNewWindow -Wait
+      when: download_result is succeeded
+
+    - name: Open Windows Exporter Port in Firewall
+      win_firewall_rule:
+        name: Prometheus-Windows-Exporter
+        enabled: yes
+        direction: in
+        action: allow
+        protocol: tcp
+        remote_ip: any
+        local_port: 9182
+      when: download_result is succeeded
