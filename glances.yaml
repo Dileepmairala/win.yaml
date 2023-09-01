@@ -1,7 +1,7 @@
 ---
 - name: Install Glances
   hosts: 10.10.5.181  # Replace with the name of your target host or group
-  become: yes  # This allows the playbook to run with sudo privileges
+  become: no  # This allows the playbook to run with sudo privileges
 
   tasks:
     - name: Install Glances (Debian/Ubuntu)
