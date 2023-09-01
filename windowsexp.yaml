@@ -1,6 +1,6 @@
 ---
 - name: Install Windows Exporter
-  hosts: windows_target  # Replace with the name of your Windows 10 host or group
+  hosts: 10.10.5.181 # Replace with the name of your Windows 10 host or group
   become: yes
   tasks:
     - name: Download Windows Exporter
