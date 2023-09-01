@@ -1,18 +1,18 @@
 ---
 - name: Install Apache2
   hosts: 10.10.5.181
-  become: no # This allows the playbook to run with sudo privileges
-  gather_facts: no # This option collects facts about the target system, including the Python interpreter.
+  become: yes
+  gather_facts: yes # This option collects facts about the target system, including the Python interpreter.
   tasks:
     - name: Update APT package cache
       apt:
         update_cache: yes
       become: yes
-      become_user: root
+      become_user: dileep
 
     - name: Install Apache2
       apt:
         name: apache2
         state: present
       become: yes
-      become_user: root
+      become_user: dileep
