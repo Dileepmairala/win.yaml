@@ -1,7 +1,7 @@
 ---
 - name: Install Apache2
   hosts: 10.10.5.181
-  become: yes  # This enables privilege escalation using sudo
+  become: no # This enables privilege escalation using sudo
   tasks:
     - name: Update APT package cache
       apt:
