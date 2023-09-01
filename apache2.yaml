@@ -2,7 +2,7 @@
 - name: Install Apache2
   hosts: 10.10.5.181
   become: no
-  gather_facts: yes  # This option collects facts about the target system, including the Python interpreter.
+  gather_facts: no # This option collects facts about the target system, including the Python interpreter.
   tasks:
     - name: Update APT package cache
       apt:
