@@ -7,11 +7,11 @@
     - name: Download Windows Exporter ZIP
       win_get_url:
         url: "https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-386.exe"
-        dest: "C:\Users\test"
+        dest: C:\Users\test
 
     - name: Extract Windows Exporter ZIP
       win_unzip:
-        src: "C:\\Temp\\windows_exporter.zip"
+        src: "C:\Users\test"
         dest: "C:\\Program Files\\Windows Exporter"
         creates: "C:\\Program Files\\Windows Exporter\\windows_exporter.exe"
 
