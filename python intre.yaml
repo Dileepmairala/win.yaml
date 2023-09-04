@@ -1,7 +1,7 @@
 ---
 - name: Configure Windows Exporter
   hosts: 10.10.5.181
-  become: yes
+  become: no
   tasks:
     - name: Set Python interpreter for Windows
       set_fact:
