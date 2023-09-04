@@ -5,11 +5,11 @@
     - name: Download Windows Exporter
       win_get_url:
         url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.17.0/windows_exporter-0.17.0-amd64.exe
-        dest: C:\Prometheus\windows_exporter.exe
+        dest: C:\Windows\prometheus\windows_exporter.exe
 
     - name: Create Windows Exporter Configuration File
       win_ini_file:
-        dest: C:\Prometheus\windows_exporter.yml
+        dest: C:\Windows\prometheus\windows_exporter.yml
         section: 'global'
         option: 'web.listen-address'
         value: '0.0.0.0:9182'
