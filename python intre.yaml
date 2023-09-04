@@ -9,9 +9,4 @@
       delegate_to: 10.10.5.82  # This ensures the task runs on the control node
       run_once: yes
 
-    - name: Create Windows Exporter Configuration File
-      community.windows.win_ini_file:
-        path: C:\path\to\your\config.ini
-        section: ExporterSettings
-        option: listen_address
-        value: 0.0.0.0
+ 
