@@ -5,9 +5,9 @@
     - name: Download Windows Exporter MSI
       win_get_url:
         url: https://github.com/prometheus-community/windows_exporter/releases/download/v<0.17.0/windows_exporter-0.17.0-amd64.msi
-        dest: C:\Windows\prometheus\windows_exporter.msi
+        dest: C:\temp\windows_exporter.msi
 
     - name: Install Windows Exporter
       win_msi:
-        path: C:\Windows\prometheus\windows_exporter.msi
+        path: C:\temp\windows_exporter.msi
         arguments: '/qn'
