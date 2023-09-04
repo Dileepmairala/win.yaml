@@ -1,18 +1,13 @@
 ---
-- name: Install Windows Exporter
+- name: Install Prometheus Windows Exporter
   hosts: 10.10.5.181
   tasks:
-    - name: Download Windows Exporter
+    - name: Download Windows Exporter MSI
       win_get_url:
-        url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.17.0/windows_exporter-0.17.0-amd64.exe
-        dest: C:\Windows\prometheus\windows_exporter.exe
+        url: https://github.com/prometheus-community/windows_exporter/releases/download/v<0.17.0/windows_exporter-0.17.0-amd64.msi
+        dest: C:\Windows\prometheus\windows_exporter.msi
 
-    - name: Create Windows Exporter Configuration File
-      win_ini_file:
-        dest: C:\Windows\prometheus\windows_exporter.yml
-        section: 'global'
-        option: 'web.listen-address'
-        value: '0.0.0.0:9182'
-
-    - name: Start Windows Exporter Service
-      win_command: C:\Prometheus\windows_exporter.exe --config.file=C:\Prometheus\windows_exporter.yml
+    - name: Install Windows Exporter
+      win_msi:
+        path: C:\Windows\prometheus\windows_exporter.msi
+        arguments: '/qn'
